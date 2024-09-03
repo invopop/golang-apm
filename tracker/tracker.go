@@ -28,15 +28,16 @@ func TrackWithCtx(ctx context.Context, opts ...Options) (*Config, error) {
 		}
 	}
 
-	if !c.pauseMetrics {
-		metricsHandler := Metrics{}
-		go func() {
-			errMetrics := metricsHandler.initMetrics(ctx, c)
-			if errMetrics != nil {
-				log.Println("failed to track metrics: ", errMetrics)
-			}
-		}()
-	}
+	//if !c.pauseMetrics {
+	// Always allow metrics, but pause process data
+	metricsHandler := Metrics{}
+	go func() {
+		errMetrics := metricsHandler.initMetrics(ctx, c)
+		if errMetrics != nil {
+			log.Println("failed to track metrics: ", errMetrics)
+		}
+	}()
+	//}
 
 	return c, nil
 }

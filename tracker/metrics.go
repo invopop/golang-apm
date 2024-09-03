@@ -60,17 +60,14 @@ func (t *Metrics) initMetrics(ctx context.Context, c *Config) error {
 
 		tick := time.NewTicker(10 * time.Second)
 		defer tick.Stop()
-		for {
-			select {
-			case <-tick.C:
-				t.collectMetrics(ctx)
-			}
+		for range tick.C {
+			t.collectMetrics(ctx)
 		}
 	}
 	return nil
 }
 
-func (t *Metrics) collectMetrics(ctx context.Context) {
+func (t *Metrics) collectMetrics(_ context.Context) {
 	var ms runtime.MemStats
 	gc := debug.GCStats{
 		PauseQuantiles: make([]time.Duration, 5),
